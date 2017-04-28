@@ -493,13 +493,12 @@ stream_decrypt(buffer_t *ciphertext, cipher_ctx_t *cipher_ctx, size_t capacity)
                               ciphertext->len);
 
         if (left_len > 0) {
-            memcpy(cipher_ctx->chunk->data, ciphertext->data, left_len);
+            memcpy(cipher_ctx->chunk->data + cipher_ctx->chunk->len, ciphertext->data, left_len);
             memmove(ciphertext->data, ciphertext->data + left_len,
                     ciphertext->len - left_len);
             cipher_ctx->chunk->len += left_len;
             ciphertext->len        -= left_len;
-        }
-
+       
         if (cipher_ctx->chunk->len < cipher->nonce_len)
             return CRYPTO_NEED_MORE;
 
